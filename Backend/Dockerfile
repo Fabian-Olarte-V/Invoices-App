@@ -1,5 +1,5 @@
 #Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY ["WebApp/WebApp.csproj", "WebApp/"]
@@ -14,7 +14,7 @@ RUN dotnet publish "WebApp/WebApp.csproj" -c Release -o /app/publish
 
 
 #Stage 2: Create runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 

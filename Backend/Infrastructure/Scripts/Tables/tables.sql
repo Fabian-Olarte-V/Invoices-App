@@ -45,3 +45,30 @@ CREATE TABLE dbo.TblDetallesFactura (
     SubtotalProducto DECIMAL(12,2) NOT NULL,
     Notas VARCHAR(200) NULL
 );
+
+INSERT INTO dbo.CatTipoCliente (TipoCliente)
+VALUES
+    ('Minorista'),
+    ('Mayorista');
+
+INSERT INTO dbo.CatProductos (NombreProducto, ImagenProducto, PrecioUnitario, ext)
+VALUES
+    ('Laptop Lenovo', NULL, 2500.00, NULL),
+    ('Monitor Samsung', NULL, 850.00, NULL);
+
+INSERT INTO dbo.TblClientes (RazonSocial, IdTipoCliente, FechaCreacion, RFC)
+VALUES
+    ('Tecnologia Empresarial SAS', 1, '2026-01-15', 'TES123456A1'),
+    ('Distribuciones del Norte SAS', 2, '2026-02-10', 'DNO987654B2');
+
+INSERT INTO dbo.TblFacturas (FechaEmisionFactura, IdCliente, NumeroFactura, NumeroTotalArticulos, SubTotalFactura, TotalImpuesto, TotalFactura)
+VALUES
+    ('2026-03-01T10:00:00', 1, 1001, 3, 3350.00, 636.50, 3986.50),
+    ('2026-03-05T15:30:00', 2, 1002, 4, 4200.00, 798.00, 4998.00);
+
+INSERT INTO dbo.TblDetallesFactura (IdFactura, IdProducto, CantidadDelProducto, PrecioUnitarioProducto, SubtotalProducto, Notas)
+VALUES
+    (1, 1, 1, 2500.00, 2500.00, 'Equipo principal'),
+    (1, 2, 1, 850.00, 850.00, 'Monitor adicional'),
+    (2, 1, 1, 2500.00, 2500.00, 'Portatil para gerencia'),
+    (2, 2, 2, 850.00, 1700.00, 'Monitores para oficina');

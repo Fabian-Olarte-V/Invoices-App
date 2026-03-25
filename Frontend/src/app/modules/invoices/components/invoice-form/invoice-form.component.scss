@@ -68,7 +68,7 @@
 
         .table-header {
             display: grid;
-            grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr 60px;
+            grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr 110px;
             gap: 0;
             background: #f8f9fa;
             padding: 0;
@@ -92,7 +92,7 @@
         .details-container {
             .detail-row {
                 display: grid;
-                grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr 60px;
+                grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr 110px;
                 gap: 0;
                 padding: 0;
                 align-items: stretch;
