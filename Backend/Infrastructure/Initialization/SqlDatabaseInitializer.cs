@@ -36,6 +36,8 @@ public sealed class SqlDatabaseInitializer : IDatabaseInitializer
             return;
         }
 
+        await EnsureDatabaseExistsAsync(cancellationToken);
+
         var scriptsRoot = ResolveScriptsRoot();
         var scriptFiles = GetOrderedScriptFiles(scriptsRoot);
 
@@ -105,5 +107,35 @@ public sealed class SqlDatabaseInitializer : IDatabaseInitializer
         return GoRegex.Split(script)
             .Select(batch => batch.Trim())
             .Where(batch => !string.IsNullOrWhiteSpace(batch));
+    }
+
+    private async Task EnsureDatabaseExistsAsync(CancellationToken cancellationToken)
+    {
+        var applicationConnection = (SqlConnection)_connectionFactory.CreateConnection();
+        var builder = new SqlConnectionStringBuilder(applicationConnection.ConnectionString);
+        var databaseName = builder.InitialCatalog;
+
+        if (string.IsNullOrWhiteSpace(databaseName))
+        {
+            throw new InvalidOperationException("The connection string must include a database name.");
+        }
+
+        var masterBuilder = new SqlConnectionStringBuilder(builder.ConnectionString)
+        {
+            InitialCatalog = "master"
+        };
+
+        await using var connection = new SqlConnection(masterBuilder.ConnectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        await using var command = connection.CreateCommand();
+        command.CommandTimeout = 120;
+        command.CommandText = $@"
+IF DB_ID(N'{databaseName.Replace("'", "''")}') IS NULL
+BEGIN
+    CREATE DATABASE [{databaseName.Replace("]", "]]")}]
+END";
+
+        await command.ExecuteNonQueryAsync(cancellationToken);
     }
 }
